@@ -1,7 +1,11 @@
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerMovements : MonoBehaviour
 {
+    public Text currentCoinText;
+    public int currentCoin = 0;
+    public Text maxHealthText;
     public int maxHealth = 10;
     public float movement;
     public float speed = 7f;
@@ -22,9 +26,10 @@ public class PlayerMovements : MonoBehaviour
     void Update() {
         if(maxHealth <= 0) {
             Die();
-        
         }
 
+        currentCoinText.text = currentCoin.ToString();
+        maxHealthText.text = maxHealth.ToString();
         movement = Input.GetAxis("Horizontal");   
         
         if (movement > 0 && !facingRight) { // Move Right
@@ -91,6 +96,16 @@ public class PlayerMovements : MonoBehaviour
             isGround = true;
             animator.SetBool("Jump", false);
         } 
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Coin")
+        {
+            currentCoin++;
+            other.gameObject.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Collect");
+            Destroy(other.gameObject, 1f);
+        }
     }
 
     public void PlayerTakeDamage(int damage){
