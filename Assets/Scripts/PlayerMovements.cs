@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerMovements : MonoBehaviour
 {
+    public GameObject GameOverUI ;
     public Text currentCoinText;
     public int currentCoin = 0;
     public Text maxHealthText;
@@ -106,6 +107,10 @@ public class PlayerMovements : MonoBehaviour
             other.gameObject.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Collect");
             Destroy(other.gameObject, 1f);
         }
+        if (other.gameObject.tag == "Trap")
+        {
+            Die();
+        }
     }
 
     public void PlayerTakeDamage(int damage){
@@ -128,6 +133,7 @@ if (attackpoint == null) {
     void Die(){
         Debug.Log(this.transform.name + " Dead");
         Destroy(this.gameObject);
-    }
+        GameOverUI.SetActive(true);
+    } 
 
 }
